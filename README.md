@@ -56,7 +56,7 @@ git clone <repository-url>
 cd hr_workers_project
 
 # Запуск всех сервисов
-docker-compose up --build
+docker compose up --build
 ```
 
 Приложение будет доступно на:
@@ -277,19 +277,19 @@ hr_workers_project/
 
 ```bash
 # Запуск в фоне
-docker-compose up -d
+docker compose up -d
 
 # Просмотр логов
-docker-compose logs -f web
+docker compose logs -f web
 
 # Выполнение команд в контейнере
-docker-compose exec web poetry run python manage.py shell
+docker compose exec web poetry run python manage.py shell
 
 # Остановка и удаление
-docker-compose down -v
+docker compose down -v
 
 # Пересборка образов
-docker-compose build --no-cache
+docker compose build --no-cache
 ```
 
 ## Особенности реализации

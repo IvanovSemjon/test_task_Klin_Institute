@@ -25,9 +25,24 @@ jobs:
         cache-from: type=gha
         cache-to: type=gha,mode=max
     
+    - name: Create .env file for testing
+      run: |
+        echo "SECRET_KEY=test-secret-key-for-docker" > .env
+        echo "DEBUG=True" >> .env
+    
     - name: Test Docker Compose
       run: |
-        docker-compose up -d
-        sleep 30
+        docker compose up -d --wait
+        sleep 10
+        
+        # Test API endpoint
         curl -f http://localhost:8000/api/workers/ || exit 1
-        docker-compose down
+        
+        # Test admin endpoint
+        curl -f http://localhost:8000/admin/ || exit 1
+        
+        # Show logs for debugging
+        docker compose logs web
+        
+        # Cleanup
+        docker compose down -v
