@@ -22,8 +22,5 @@ RUN poetry install
 # Copy project
 COPY . .
 
-# Create wait script
-RUN echo '#!/bin/sh\necho "Waiting for postgres..."\nuntil pg_isready -h $DB_HOST -p $DB_PORT -U $DB_USER; do\n  echo "PostgreSQL is unavailable - sleeping"\n  sleep 2\ndone\necho "PostgreSQL is up - executing command"\npoetry run python manage.py migrate\npoetry run python manage.py runserver 0.0.0.0:8000' > /app/wait-for-postgres.sh && chmod +x /app/wait-for-postgres.sh
-
 # Run migrations and start server
-CMD ["/app/wait-for-postgres.sh"]
+CMD ["sh", "-c", "poetry run python manage.py migrate && poetry run python manage.py runserver 0.0.0.0:8000"]
