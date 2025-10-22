@@ -32,8 +32,16 @@ jobs:
     
     - name: Test Docker Compose
       run: |
+        # Clean up any existing containers and images
+        docker compose down -v --remove-orphans || true
+        docker system prune -f || true
+        
+        # Build without cache to ensure fresh build
+        docker compose build --no-cache
+        
+        # Start services
         docker compose up -d --wait
-        sleep 10
+        sleep 15
         
         # Test API endpoint
         curl -f http://localhost:8000/api/workers/ || exit 1
